@@ -6,6 +6,9 @@
     "minVersion": "0.8",
     
 	"mixins": [],
-    "client": ["json_render.MixinWaystonesClientProxy"],
+    "client": [
+        "json_render.MixinWaystonesClientProxy",
+        "cost.MixinBlockWaystone"
+    ],
     "server": []
 }

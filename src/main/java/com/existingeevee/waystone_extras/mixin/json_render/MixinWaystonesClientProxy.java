@@ -14,7 +14,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 @Mixin(remap = false, value = ClientProxy.class)
 public abstract class MixinWaystonesClientProxy {
 
-	@Redirect(method = "preInit()V", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/fml/client/registry/ClientRegistry;bindTileEntitySpecialRenderer(Ljava/lang/Class;Lnet/minecraft/client/renderer/tileentity/TileEntitySpecialRenderer;)V"))
+	@Redirect(method = "preInit(Lnet/minecraftforge/fml/common/event/FMLPreInitializationEvent;)V", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/fml/client/registry/ClientRegistry;bindTileEntitySpecialRenderer(Ljava/lang/Class;Lnet/minecraft/client/renderer/tileentity/TileEntitySpecialRenderer;)V"))
 	private void waystone_extras$preventTESRRegistry(Class<TileEntity> tileEntityClass, TileEntitySpecialRenderer<TileEntity> specialRenderer) {
 		//register it as usual
 		if (!WaystoneJsonRenderer.isEnabled()) {
