@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.existingeevee.waystone_extras.ConfigHandler;
+import com.existingeevee.waystone_extras.features.WaystoneJsonRenderer;
 
 import net.blay09.mods.waystones.Waystones;
 import net.minecraft.block.Block;
@@ -16,7 +16,7 @@ public abstract class MixinBlock {
 
 	@Inject(method = "getRenderLayer", at = @At("HEAD"), cancellable = true)
 	public void waystone_extras$changeWaystoneRenderLayer(CallbackInfoReturnable<BlockRenderLayer> ci) {
-		if (ConfigHandler.JsonModelRenderer.useJsonModelRenderer && (Block) (Object) this == Waystones.blockWaystone) {
+		if (WaystoneJsonRenderer.isEnabled() && (Block) (Object) this == Waystones.blockWaystone) {
 			ci.setReturnValue(BlockRenderLayer.CUTOUT_MIPPED);
 		}
 	}

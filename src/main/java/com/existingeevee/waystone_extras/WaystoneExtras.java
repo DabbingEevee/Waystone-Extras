@@ -10,7 +10,7 @@ public class WaystoneExtras {
     public WaystoneExtras() {
     	//we need this EARLY. 
     	//otherwise stuff in preinit wont be affected
-    	ConfigHandler.init(); 
+    	WaystoneExtrasConfig.init(); 
     }
     
     @Mod.EventHandler

@@ -1,4 +1,7 @@
-package com.existingeevee.waystone_extras;
+package com.existingeevee.waystone_extras.features;
+
+import com.existingeevee.waystone_extras.WaystoneExtras;
+import com.existingeevee.waystone_extras.WaystoneExtrasConfig;
 
 import net.blay09.mods.waystones.Waystones;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -11,10 +14,14 @@ public class WaystoneJsonRenderer {
 		if (
 				location.getNamespace().equals(Waystones.blockWaystone.getRegistryName().getNamespace()) && 
 				location.getPath().equals(Waystones.blockWaystone.getRegistryName().getPath()) && 
-				ConfigHandler.JsonModelRenderer.useJsonModelRenderer
+				isEnabled()
 			) {
 	        return new ModelResourceLocation(WaystoneExtras.MODID + ":blockstates/" + location.getPath() + "_json.json", "inventory");
 		}
 		return null;
+	}
+	
+	public static boolean isEnabled() {
+		return WaystoneExtrasConfig.JsonModelRenderer.useJsonModelRenderer;
 	}
 }

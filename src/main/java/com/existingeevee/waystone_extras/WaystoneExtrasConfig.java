@@ -4,7 +4,7 @@ import java.io.File;
 
 import net.minecraftforge.common.config.Configuration;
 
-public class ConfigHandler {
+public class WaystoneExtrasConfig {
 
 	public static class JsonModelRenderer {
 		public static boolean useJsonModelRenderer = false;
