@@ -1,0 +1,17 @@
+{
+    "required": true,
+    "compatibilityLevel": "JAVA_8",
+    "package": "com.existingeevee.waystone_extras.mixin",
+    "refmap": "refmap.example.json",
+    "minVersion": "0.8",
+    
+	"mixins": ["MixinLoaderLateConfigs"],
+	
+    "client": [
+        "json_render.MixinModelBakery", 
+        "json_render.MixinBlockContainer", 
+        "json_render.MixinBlock"
+    ],
+    
+    "server": []
+}

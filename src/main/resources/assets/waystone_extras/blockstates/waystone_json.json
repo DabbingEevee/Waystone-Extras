@@ -1,0 +1,31 @@
+{
+  "variants": {
+    "base=false,facing=south": {
+      "model": "waystone_extras:waystone_top_json"
+    },
+    "base=true,facing=south": {
+      "model": "waystone_extras:waystone_base_json"
+    },
+    "base=false,facing=north": {
+      "model": "waystone_extras:waystone_top_json"
+    },
+    "base=true,facing=north": {
+      "model": "waystone_extras:waystone_base_json"
+    },
+    "base=false,facing=east": {
+      "model": "waystone_extras:waystone_top_json"
+    },
+    "base=true,facing=east": {
+      "model": "waystone_extras:waystone_base_json"
+    },
+    "base=false,facing=west": {
+      "model": "waystone_extras:waystone_top_json"
+    },
+    "base=true,facing=west": {
+      "model": "waystone_extras:waystone_base_json"
+    },
+    "inventory": {
+      "model": "waystone_extras:waystone_full_json"
+    }
+  }
+}
