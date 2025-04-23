@@ -1,9 +1,14 @@
 package com.existingeevee.waystone_extras.features;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.existingeevee.waystone_extras.WaystoneExtrasConfig;
 
 import baubles.api.BaublesApi;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
@@ -12,42 +17,135 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 public class WaystoneItemCost {
 
 	public static boolean doesPlayerHaveKey(EntityPlayer player, boolean consume) {
-		if (WaystoneExtrasConfig.ItemCost.teleportationKeyInBaubles && Loader.isModLoaded("baubles")) {
-			IItemHandlerModifiable handler = getBaublesItems(player);
-						
-			String cfg = WaystoneExtrasConfig.ItemCost.teleportationKeyItem;
-			if (cfg.trim().isEmpty())
+		String cfg = WaystoneExtrasConfig.ItemCost.teleportationKeyItem;
+		if (cfg.trim().isEmpty() || player.capabilities.isCreativeMode)
+			return true;
+		
+		int totalCount = 0;
+		List<ItemStack> items = new ArrayList<>();
+
+		if (WaystoneExtrasConfig.ItemCost.teleportationKeyInBaubles) {
+			if (!Loader.isModLoaded("baubles"))
 				return true;
-						
+
+			IItemHandlerModifiable handler = getBaublesItems(player);
+
 			for (int a = 0; a < handler.getSlots(); a++) {
 				ItemStack stack = handler.getStackInSlot(a);
 
+				if (WaystoneExtrasConfig.ItemCost.teleportationKeyCostDurability && !stack.isItemStackDamageable()) {
+					continue;
+				}
+
 				if (!stack.isEmpty() && is(stack, cfg)) {
-					int cost = WaystoneExtrasConfig.ItemCost.teleportationKeyCostCount;
-
-					if (WaystoneExtrasConfig.ItemCost.teleportationKeyCostDurability) {
-						if (stack.getMaxDamage() - stack.getItemDamage() < cost) {
-							return false;
-						}
-						if (consume) {
-							stack.damageItem(cost, player);
-						}
-					} else {
-
-						if (consume) {
-							if (stack.getCount() < cost) {
-								return false;
-							}
-							stack.shrink(cost);
-						}
+					items.add(stack);
+					totalCount += WaystoneExtrasConfig.ItemCost.teleportationKeyCostDurability ? stack.getMaxDamage() - stack.getItemDamage() + 1 : stack.getCount();
+				}
+			}
+		} else {
+			InventoryPlayer inventory = player.inventory;
+			for (List<ItemStack> list : Arrays.asList(inventory.mainInventory, inventory.armorInventory, inventory.offHandInventory)) {
+				for (ItemStack stack : list) {
+					if (WaystoneExtrasConfig.ItemCost.teleportationKeyCostDurability && !stack.isItemStackDamageable()) {
+						continue;
 					}
-					return true;
 
+					if (!stack.isEmpty() && is(stack, cfg)) {
+						items.add(stack);
+						totalCount += WaystoneExtrasConfig.ItemCost.teleportationKeyCostDurability ? stack.getMaxDamage() - stack.getItemDamage() + 1 : stack.getCount();
+					}
 				}
 			}
 		}
+
+		if (totalCount < WaystoneExtrasConfig.ItemCost.teleportationKeyCostCount) {
+			return false; // we dont have enough
+		} else {
+			if (consume) {
+				int debt = WaystoneExtrasConfig.ItemCost.teleportationKeyCostCount;
+
+				for (ItemStack stack : items) {
+					if (WaystoneExtrasConfig.ItemCost.teleportationKeyCostDurability) {
+						int durability = stack.getMaxDamage() - stack.getItemDamage() + 1;
+						int payment = Math.min(durability, debt);
+						debt -= payment;
+						stack.damageItem(payment, player);
+					} else {
+						int count = stack.getCount();
+						int payment = Math.min(count, debt);
+						debt -= payment;
+						stack.shrink(payment);
+					}
+				}
+			}
+			return true;
+		}
+	}
+	
+	public static boolean doesPlayerHaveTPItem(EntityPlayer player, boolean consume, int cost) {
+		String cfg = WaystoneExtrasConfig.ItemCost.teleportationCostItem;
+		if (cfg.trim().isEmpty() || player.capabilities.isCreativeMode)
+			return true;
 		
-		return false;
+		int totalCount = 0;
+		List<ItemStack> items = new ArrayList<>();
+
+		if (WaystoneExtrasConfig.ItemCost.teleportationKeyInBaubles) {
+			if (!Loader.isModLoaded("baubles"))
+				return true;
+
+			IItemHandlerModifiable handler = getBaublesItems(player);
+
+			for (int a = 0; a < handler.getSlots(); a++) {
+				ItemStack stack = handler.getStackInSlot(a);
+
+				if (WaystoneExtrasConfig.ItemCost.teleportationKeyCostDurability && !stack.isItemStackDamageable()) {
+					continue;
+				}
+
+				if (!stack.isEmpty() && is(stack, cfg)) {
+					items.add(stack);
+					totalCount += WaystoneExtrasConfig.ItemCost.teleportationKeyCostDurability ? stack.getMaxDamage() - stack.getItemDamage() + 1 : stack.getCount();
+				}
+			}
+		} else {
+			InventoryPlayer inventory = player.inventory;
+			for (List<ItemStack> list : Arrays.asList(inventory.mainInventory, inventory.armorInventory, inventory.offHandInventory)) {
+				for (ItemStack stack : list) {
+					if (WaystoneExtrasConfig.ItemCost.teleportationKeyCostDurability && !stack.isItemStackDamageable()) {
+						continue;
+					}
+
+					if (!stack.isEmpty() && is(stack, cfg)) {
+						items.add(stack);
+						totalCount += WaystoneExtrasConfig.ItemCost.teleportationKeyCostDurability ? stack.getMaxDamage() - stack.getItemDamage() + 1 : stack.getCount();
+					}
+				}
+			}
+		}
+
+		if (totalCount < WaystoneExtrasConfig.ItemCost.teleportationKeyCostCount) {
+			return false; // we dont have enough
+		} else {
+			if (consume) {
+				int debt = WaystoneExtrasConfig.ItemCost.teleportationKeyCostCount;
+
+				for (ItemStack stack : items) {
+					if (WaystoneExtrasConfig.ItemCost.teleportationKeyCostDurability) {
+						int durability = stack.getMaxDamage() - stack.getItemDamage() + 1;
+						int payment = Math.min(durability, debt);
+						debt -= payment;
+						stack.damageItem(payment, player);
+					} else {
+						int count = stack.getCount();
+						int payment = Math.min(count, debt);
+						debt -= payment;
+						stack.shrink(payment);
+					}
+				}
+			}
+			return true;
+		}
 	}
 
 	// We keep this in a seperate method in case baubles isnt installed so it dosent crash
@@ -59,7 +157,7 @@ public class WaystoneItemCost {
 		if (config.isEmpty()) {
 			return false;
 		}
-		
+
 		String[] split = config.split("\\|");
 
 		if (split.length != 2) {
@@ -95,5 +193,12 @@ public class WaystoneItemCost {
 
 	public static boolean isEnabled() {
 		return WaystoneExtrasConfig.ItemCost.useItemCost;
+	}
+	
+	public static interface ItemCostGuiButton {
+		
+		public int getCost();
+		public void setCost(int newCost);
+		
 	}
 }

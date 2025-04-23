@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 @Mixin(value = BlockWaystone.class, remap = false)
@@ -28,6 +29,7 @@ public class MixinBlockWaystone {
 
 		if (WaystoneItemCost.isEnabled() && !WaystoneExtrasConfig.ItemCost.teleportationKeyItem.trim().isEmpty()) {
 			if (!WaystoneItemCost.doesPlayerHaveKey(player, !world.isRemote)) {
+                player.sendStatusMessage(new TextComponentTranslation("waystone_extras:missingKey"), true);
 				ci.setReturnValue(true);
 			}
 		}
