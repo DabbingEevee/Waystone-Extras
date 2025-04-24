@@ -2,7 +2,7 @@
     "required": true,
     "compatibilityLevel": "JAVA_8",
     "package": "com.existingeevee.waystone_extras.mixin",
-    "refmap": "refmap.example.json",
+    "refmap": "refmap.waystone_extras.json",
     "minVersion": "0.8",
     
 	"mixins": [

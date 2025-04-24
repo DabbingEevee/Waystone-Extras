@@ -5,9 +5,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.existingeevee.waystone_extras.WaystoneExtras;
 import com.existingeevee.waystone_extras.features.WaystoneJsonRenderer;
 
-import net.blay09.mods.waystones.Waystones;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.state.IBlockState;
@@ -18,7 +18,7 @@ public class MixinBlockContainer {
 
 	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
 	public void waystone_extras$changeWaystoneRenderType(IBlockState state, CallbackInfoReturnable<EnumBlockRenderType> ci) {
-		if (WaystoneJsonRenderer.isEnabled() && (Block) (Object) this == Waystones.blockWaystone) {
+		if (WaystoneJsonRenderer.isEnabled() && (Block) (Object) this == WaystoneExtras.blockWaystone) {
 			ci.setReturnValue(EnumBlockRenderType.MODEL);
 		}
 	}

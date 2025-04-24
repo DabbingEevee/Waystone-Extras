@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 @Mixin(ModelBakery.class)
 public abstract class MixinModelBakery {
 
-	@Inject(method = "getBlockstateLocation", at = @At("HEAD"), cancellable = true)
+	@Inject(method = { "getBlockstateLocation(Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/util/ResourceLocation;", "func_188631_b(Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/util/ResourceLocation;" }, at = @At("HEAD"), cancellable = true, remap = false)
 	private void waystone_extras$replaceWaystoneBlockstateDef(ResourceLocation location, CallbackInfoReturnable<ResourceLocation> ci) {
 		ResourceLocation loc = WaystoneJsonRenderer.getJsonWaystoneModelLocation(location);
 		if (loc != null) {
