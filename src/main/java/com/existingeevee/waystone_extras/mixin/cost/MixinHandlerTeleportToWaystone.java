@@ -15,10 +15,10 @@ import net.blay09.mods.waystones.network.message.MessageTeleportToWaystone;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-@Mixin(HandlerTeleportToWaystone.class)
+@Mixin(value = HandlerTeleportToWaystone.class, remap = false)
 public class MixinHandlerTeleportToWaystone {
 
-	@Inject(method = "lambda$onMessage$0(Lnet/minecraftforge/fml/common/network/simpleimpl/MessageContext;Lnet/blay09/mods/waystones/network/message/MessageTeleportToWaystone;)V", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "lambda$onMessage$0(Lnet/minecraftforge/fml/common/network/simpleimpl/MessageContext;Lnet/blay09/mods/waystones/network/message/MessageTeleportToWaystone;)V", at = @At("HEAD"), remap = false, cancellable = true)
 	private static void waystone_extras$preventButtonPressNoItem(MessageContext ctx, MessageTeleportToWaystone message,  CallbackInfo ci) {
         EntityPlayer player = ctx.getServerHandler().player;
         TileWaystone waystone = WaystoneManager.getWaystoneInWorld(message.getWaystone());

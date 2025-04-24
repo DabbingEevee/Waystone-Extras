@@ -19,7 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
-@Mixin(GuiButtonWaystoneEntry.class)
+@Mixin(value = GuiButtonWaystoneEntry.class, remap = false)
 public class MixinGuiButtonWaystoneEntry extends GuiButton implements ItemCostGuiButton {
 
 	public MixinGuiButtonWaystoneEntry(int buttonId, int x, int y, String buttonText) {
@@ -71,7 +71,7 @@ public class MixinGuiButtonWaystoneEntry extends GuiButton implements ItemCostGu
 		this.itemCost = newCost;
 	}
 
-	@Inject(method = { "drawButton(Lnet/minecraft/client/Minecraft;IIF)V", "func_191745_a(Lnet/minecraft/client/Minecraft;IIF)V" }, at = @At("TAIL"))
+	@Inject(method = { "drawButton(Lnet/minecraft/client/Minecraft;IIF)V", "func_191745_a(Lnet/minecraft/client/Minecraft;IIF)V" }, remap = false, at = @At("TAIL"))
 	public void waystone_extras$renderItemCost(Minecraft mc, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
 		WaystoneItemCost.hookRenderItemCost(mc, mouseX, mouseY, partialTicks, ci, !missingCost, getCost(), costItem, this);
 	}
