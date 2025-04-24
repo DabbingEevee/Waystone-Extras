@@ -5,10 +5,13 @@
     "refmap": "refmap.example.json",
     "minVersion": "0.8",
     
-	"mixins": [],
+	"mixins": [
+	    "cost.MixinHandlerTeleportToWaystone"
+	],
     "client": [
         "json_render.MixinWaystonesClientProxy",
-        "cost.MixinBlockWaystone"
+        "cost.MixinBlockWaystone",
+        "cost.MixinGuiButtonWaystoneEntry"
     ],
     "server": []
 }
